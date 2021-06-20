@@ -103,7 +103,7 @@ if [[ ! -d "./kernel" ]]; then
     echo "[CONFIGURE] Downloading kernel source code..."
     git clone $KERNEL_GIT ./kernel
     echo "[PATCH] Downloading kernel patches..."
-    if [ ! -f "mac80211.compat08082009.wl_frag+ack_v1.patch" ]]; then
+    if [[ ! -f "mac80211.compat08082009.wl_frag+ack_v1.patch" ]]; then
     	wget http://patches.aircrack-ng.org/mac80211.compat08082009.wl_frag+ack_v1.patch
     fi
     
@@ -113,6 +113,9 @@ if [[ ! -d "./kernel" ]]; then
 
 	echo "[PATCH] Patching kernel (HID)..."
 	patch -p1 < ../hid.patch
+	
+	echo "[PATCH] Patching kernel (DTC build error)"
+	patch -p1 < ../fixbuild.patch
     cd ..
 fi
 
