@@ -4,7 +4,7 @@ DEV_BOARD="hammerhead"
 DEV_DESC="Nexus 5 crDroid"
 DEV_ARCH="armhf"
 DEV_BLOCK="/dev/block/platform/msm_sdcc.1/by-name/boot"
-KERN_CONFIG="kali_lineageos_hammerhead_defconfig"
+KERN_CONFIG="lineageos_hammerhead_defconfig"
 KERN_BUILDVER="1.1"
 KERN_STRING="Kali Hammerhead crDroid"
 KERN_AUTHOR="Lavanoid"
@@ -114,8 +114,6 @@ if [[ ! -d "./kernel" ]]; then
 	echo "[PATCH] Patching kernel (HID)..."
 	patch -p1 < ../hid.patch
 	
-	echo "[PATCH] Patching kernel (DTC build error)"
-	patch -p1 < ../fixbuild.patch
     cd ..
 fi
 
@@ -178,20 +176,12 @@ if [[ -f "kernel/arch/arm/boot/zImage-dtb" ]]; then
     cp -f "kernel/arch/arm/boot/zImage-dtb" "$NH_DEVDIR/$KERN_ANDROIDVER/$KALI_DEVNAME/zImage-dtb"
     echo "[BUILD] Building Kali Nethunter package..."
     sleep 2
-
-    if [[ ! -f "kali-nethunter/nethunter-installer/common/tools/freespace.sh.backup" ]]; then
-        echo "[BUILD] Backing up freespace.sh..."
-        mv "kali-nethunter/nethunter-installer/common/tools/freespace.sh" "kali-nethunter/nethunter-installer/common/tools/freespace.sh.backup"
-        echo "[BUILD] Replacing freespace.sh..."
-        echo -e '#!/bin/bash\nexit 0' > "kali-nethunter/nethunter-installer/common/tools/freespace.sh"
-    fi
     
     echo "[INFO] Changing directory to 'kali-nethunter/nethunter-installer'..."
     cd "kali-nethunter/nethunter-installer/"
+    echo "CD: "$(pwd)
     
-    echo "[INFO] Patching some files so it works with the latest TWRP..."
-    cat "../../boot-patcher-update-binary" > "./boot-patcher/META-INF/com/google/android/update-binary"
-    cat "../../nethunter-installer-update-binary" > "./update/META-INF/com/google/android/update-binary"
+    echo "[INFO] Replacing the trash boot animation..."
     cp -f "../../bootanimation.zip" "./update/system/media/"
     
     echo "[BUILD] Building the Kali NH package..."
