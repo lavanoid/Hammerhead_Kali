@@ -76,18 +76,6 @@ if NPROC=$(nproc); then
     BUILD_CORES="$NPROC"
 fi
 
-#This will appear in the kernel string, such as "root@kali".
-HOST="kali"
-
-echo "[CONFIGURE] Changing system host name to '"$HOST"'..."
-# Backup the original hostname, then change it to the value of "HOST".
-ORIGINALHOSTNAME=$(hostname)
-echo "Original hostname: $ORIGINALHOSTNAME"
-export HOSTNAME=$HOST
-sudo hostname "$HOST"
-echo "Current hostname: "$(hostname)
-sleep 2
-
 echo "[CONFIGURE] Downloading arm toolchain..."
 git clone https://github.com/LineageOS/android_prebuilts_gcc_linux-x86_arm_arm-linux-androideabi-4.9 -b lineage-17.1
 
@@ -193,12 +181,6 @@ if [[ -f "kernel/arch/arm/boot/zImage-dtb" ]]; then
 else
     echo "[FAIL] Unable to find kernel image ("$(pwd)"/kernel/arch/arm/boot/zImage-dtb). Cannot continue!"
 fi
-
-
-echo "Original hostname: $ORIGINALHOSTNAME"
-echo "[CONFIGURE] Restoring system host name to '"$ORIGINALHOSTNAME"'..."
-export HOSTNAME=$ORIGINALHOSTNAME
-sudo hostname "$ORIGINALHOSTNAME"
 
 echo "OK"
 echo "[DONE] Compilation complete."
